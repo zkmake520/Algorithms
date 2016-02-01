@@ -17,4 +17,6 @@ public class HappyNumberO_1 {
         }
         return sum;
     }
+
 }
+
