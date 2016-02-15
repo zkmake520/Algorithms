@@ -18,10 +18,13 @@ public class BuddySystem{
         Since it's full binary tree, the nodes can be stored in an array
     */
     //first lets assume that the tree is full binary tree
-	boolean[][] bitmap = new boolean[][]{{true},{true,true},{true,true,true,true},{true,true,true,true,true,true,true,true}};	
+	boolean[][] bitmap = new boolean[][]{{true},{true,true},{true,true,true,true},{true,true,true,true,true,true,true,true},
+			{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true}};	
 
 	public void renew(){
-		bitmap =  new boolean[][]{{true},{true,true},{true,true,true,true},{true,true,true,true,true,true,true,true}};	
+		bitmap =  new boolean[][]{{true},{true,true},{true,true,true,true},{true,true,true,true,true,true,true,true},{
+				true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true
+		}};	
 	}
 	public void print(){
 		System.out.println();
@@ -68,12 +71,45 @@ public class BuddySystem{
 		clearBitHelper(offset/2,end/2,lvl-1);
 
 	}
+	public void clearBit2(int offset,int len){
+		clearBitHelper2(offset,offset+len-1,bitmap.length-1);
+	}
+	public void clearBitHelper2(int offset, int end, int lvl){
+		if(end> bitmap[lvl].length || (end-offset) < 0){
+			System.out.println("Wrong parameter");
+		}
+		// System.out.println("offset "+offset+" "+"end`"+ " "+end+" "+" lvl "+lvl);
+		boolean advance = false;
+		for(int i = offset; i <= end; i++){
+			if(bitmap[lvl][i] == false){
+				if(i % 2== 0){
+					advance = true;
+				}
+				else{
+					offset = offset+ offset % 2== 0?2:1; 
+					advance = false;
+				}
+			}
+			else{
+				if(i % 2 != 0 && advance == true){
+					offset = offset+ offset % 2== 0?2:1; 
+					advance = false;
+				}
+				bitmap[lvl][i] = false;
+			}
+		}
+		//need to set the ancestor
+		if(lvl == 0){
+			return;
+		}
+		clearBitHelper(offset/2,end/2,lvl-1);
+	}
 	public void setBit(int offset, int len){
 
 	}
 	public static void main(String[] args){
 		BuddySystem buddySystem = new BuddySystem();
-		buddySystem.print();
+		long timeStart = System.currentTimeMillis();
 		buddySystem.clearBit(3,3);
 		buddySystem.print();
 		buddySystem.renew();
@@ -90,6 +126,25 @@ public class BuddySystem{
 		buddySystem.print();
 		buddySystem.clearBit(2,5);
 		buddySystem.print();
-
+		System.out.println("Time "+(System.currentTimeMillis()-timeStart));
+		buddySystem.renew();
+		timeStart = System.currentTimeMillis();
+		buddySystem.clearBit2(3,3);
+		buddySystem.print();
+		buddySystem.renew();
+		buddySystem.clearBit2(3,4);
+		buddySystem.print();
+		buddySystem.renew();
+		buddySystem.clearBit2(2,2);
+		buddySystem.print();
+		buddySystem.renew();
+		buddySystem.clearBit2(2,3);
+		buddySystem.print();
+		buddySystem.renew();
+		buddySystem.clearBit2(3,1);
+		buddySystem.print();
+		buddySystem.clearBit2(2,5);
+		buddySystem.print();
+		System.out.println("Time "+(System.currentTimeMillis()-timeStart));
 	}
 }
